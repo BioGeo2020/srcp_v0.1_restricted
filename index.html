@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#000000">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <script src="https://kit.fontawesome.com/fa66f5a4c6.js" crossorigin="anonymous"></script>
+    <title>Wildlife corridors for the Scenic Rim</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Caveat+Brush&family=Monoton&family=Righteous&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css">
+    <link rel="stylesheet" href="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css">
+    <link rel="stylesheet" href="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css">
+    <link rel="stylesheet" href="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.43.0/L.Control.Locate.css">
+    <link rel="stylesheet" href="assets/leaflet-groupedlayercontrol/leaflet.groupedlayercontrol.css">
+    <link rel="stylesheet" href="assets/css/app.css">
+
+    <link rel="apple-touch-icon" sizes="76x76" href="assets/img/favicon-76.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="assets/img/favicon-120.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="assets/img/favicon-152.png">
+    <link rel="icon" sizes="196x196" href="assets/img/parrot.png">
+    <link rel="icon" type="image/x-icon" href="assets/img/parrot.png">
+    
+
+    
+  </head>
+
+  <body>
+
+   <script>
+       var password;
+       var pass1="abc123";
+       password=prompt('Enter password to view the application','');
+       if (password==pass1);
+      </script>
+   
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation" style="background-color:#000000">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <div class="navbar-icon-container">
+            <a href="#" class="navbar-icon pull-right visible-xs" id="nav-btn"><i class="fa fa-bars fa-lg white"></i></a>
+            <a href="#" class="navbar-icon pull-right visible-xs" id="sidebar-toggle-btn"><i class="fa fa-search fa-lg white"></i></a>
+          </div>
+          
+          
+
+        </div>
+        <div class="navbar-collapse collapse">
+          <form class="navbar-form navbar-right" role="search">
+            <div class="form-group has-feedback">
+                <input id="searchbox" type="text" placeholder="Search" class="form-control">
+                <span id="searchicon" class="fa fa-search form-control-feedback"></span>
+            </div>
+          </form>
+          <ul class="nav navbar-nav">
+            <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="about-btn"><i class="fas fa-globe-asia white"></i>&nbsp;&nbsp;About the project</a></li>
+            <li class="dropdown">
+              <a id="toolsDrop" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown"><i class="fas fa-tools white"></i>&nbsp;&nbsp;Tools <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="full-extent-btn"><i class="fa fa-arrows-alt"></i>&nbsp;&nbsp;Zoom To Full Extent</a></li>
+                <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="legend-btn"><i class="fa fa-picture-o"></i>&nbsp;&nbsp;Show Legend</a></li>
+                <li class="divider hidden-xs"></li>
+                <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="login-btn"><i class="fa fa-user"></i>&nbsp;&nbsp;Login</a></li>
+
+              </ul>
+            </li>
+            <li class="dropdown">
+                <a class="dropdown-toggle" id="downloadDrop" href="#" role="button" data-toggle="dropdown"><i class="fas fa-download white"></i>&nbsp;&nbsp;Download <b class="caret"></b></a>
+                <ul class="dropdown-menu" style="background-color:#036bfc">
+                  <li><p><i style="color:white;"> &nbsp&nbsp&nbsp The below files can be downloaded and imported into a GIS &nbsp&nbsp &nbsp&nbsp&nbsp&nbsp  project.</i></p></li>
+                  <li><a href="data/scenic_rim.geojson" download="scenic_rim.geojson" target="_blank" data-toggle="collapse" data-target=".navbar-collapse.in"><i class="fa fa-download" style=""></i>&nbsp;&nbsp;Scenic Rim (geoJSON)</a></li>
+                  <li><a href="data/landuse2.geojson" download="landuse2.geojson" target="_blank" data-toggle="collapse" data-target=".navbar-collapse.in"><i class="fa fa-download"></i>&nbsp;&nbsp;Conservation areas (geoJSON</a></li>
+                  <li><a href="data/rural_properties2.geojson" download="rural_properties.geojson" target="_blank" data-toggle="collapse" data-target=".navbar-collapse.in"><i class="fa fa-download"></i>&nbsp;&nbsp;Rural properties (geoJSON)</a></li>
+                  <li><a href="data/corridors.geojson" download="corridors.geojson" target="_blank" data-toggle="collapse" data-target=".navbar-collapse.in"><i class="fa fa-download"></i>&nbsp;&nbsp;Corridors (geoJSON)</a></li>
+                  <li><a href="data/hubs.geojson" download="hubs.geojson" target="_blank" data-toggle="collapse" data-target=".navbar-collapse.in"><i class="fa fa-download"></i>&nbsp;&nbsp;Hubs (geoJSON)</a></li>
+                  <li><a href="data/ruralprop2.geojson" download="ruralprop.geojson" target="_blank" data-toggle="collapse" data-target=".navbar-collapse.in"><i class="fa fa-download"></i>&nbsp;&nbsp;Centroids (geoJSON)</a></li>
+                  <li><a href="data/koala.geojson" download="koala.geojson" target="_blank" data-toggle="collapse" data-target=".navbar-collapse.in"><i class="fa fa-download"></i>&nbsp;&nbsp;Mammals(geoJSON)</a></li>
+                  <li><a href="data/koala.geojson" download="koala.geojson" target="_blank" data-toggle="collapse" data-target=".navbar-collapse.in"><i class="fa fa-download"></i>&nbsp;&nbsp;Birds (geoJSON)</a></li>
+                  <li><p><i></i></p></li>
+                  <li><p><i style="color:white;"> &nbsp&nbsp&nbsp Other documents of interest.</i></p></li>
+                  <li><a href="assets/img/Concept_map.png" download="Concept_map.png" target="_blank" data-toggle="collapse" data-target=".navbar-collapse.in"><i class="fa fa-download"></i>&nbsp;&nbsp;Concept map (PNG image)</a></li>
+                  <li><a href="Draft_Biodiversity_Strategy_Scenic_Rim_Regional_Council.pdf" download="Draft_Biodiversity_Strategy_Scenic_Rim_Regional_Council.pdf" target="_blank" data-toggle="collapse" data-target=".navbar-collapse.in"><i class="fa fa-download"></i>&nbsp;&nbsp;Biodiversity Strategy - Scenic Rim Regional Coucil (PDF)</a></li>
+                </ul>
+            </li>
+            <li class="hidden-xs"><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="list-btn"><i class="fas fa-th-list white"></i>&nbsp;&nbsp;POI List</a></li>
+            <a class="navbar-brand" ><p class="serif">&nbsp&nbsp&nbsp&nbsp&nbsp&nbspWildlife corridors for the Scenic Rim </p></a>
+          </ul>
+        </div><!--/.navbar-collapse -->
+      </div>
+    </div>
+
+    <div id="container">
+      <div id="sidebar">
+        <div class="sidebar-wrapper">
+          <div class="panel panel-default" id="features">
+            <div class="panel-heading">
+              <h3 class="panel-title">Points of Interest
+              <button type="button" class="btn btn-xs btn-default pull-right" id="sidebar-hide-btn"><i class="fa fa-chevron-left"></i></button></h3>
+            </div>
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-xs-8 col-md-8">
+                  <input type="text" class="form-control search" placeholder="Filter" />
+                </div>
+                <div class="col-xs-4 col-md-4">
+                  <button type="button" class="btn btn-primary pull-right sort" style="background-color:#036bfc" data-sort="feature-name" id="sort-btn"><i class="fa fa-sort"></i>&nbsp;&nbsp;Sort</button>
+                </div>
+              </div>
+            </div>
+            <div class="sidebar-table">
+              <table class="table table-hover" id="feature-list">
+                <thead class="hidden">
+                  <tr>
+                    <th>Icon</th>
+                  <tr>
+                  <tr>
+                    <th>Name</th>
+                  <tr>
+                  <tr>
+                    <th>Chevron</th>
+                  <tr>
+                </thead>
+                <tbody class="list" style="background-color:white"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="map"></div>
+    </div>
+    
+    <div id="loading">
+      <div class="loading-indicator">
+        <div class="progress progress-striped active">
+          <div class="progress-bar progress-bar-info progress-bar-full"></div>
+        </div>
+      </div>
+    </div>
+    
+               <div id="logoContainer">
+        <img src="assets/img/WPSQ_logo_white.png" width="255">
+        </div>
+
+    <div class="modal fade" id="aboutModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header" style="background-color:#036bfc">
+            <button class="close" type="button" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h1  style="color:white" class="modal-title"><b><p class="serif"> &nbsp &nbsp&nbsp &nbspWelcome to the Wildlife Corridors for the Scenic Rim Project!</b></h1>
+          </div>
+          <li class="list-group-item">     
+          <a href="https://wildlife.org.au/">&nbsp &nbsp &nbsp &nbsp &nbsp&nbsp&nbsp &nbsp &nbsp&nbsp &nbsp &nbsp &nbsp &nbsp&nbsp &nbsp &nbsp&nbsp &nbsp&nbsp&nbsp &nbsp &nbsp&nbsp &nbsp&nbsp &nbsp<img src="assets/img/WPSQ_logo_colour3.png" alt="HTML tutorial" style="width:150px;"></a>
+          <a href="https://www.scenicrim.qld.gov.au/">&nbsp &nbsp &nbsp<img src="assets/img/scenicrimlogo.jpg" alt="HTML tutorial" style="width:180px;"></a>
+          <a href="https://wildlife.org.au/queensland-glider-network/">&nbsp &nbsp &nbsp<img src="assets/img/glidernetworklogo.jfif" alt="HTML tutorial" style="width:140px;"></a>
+          
+          <div class="modal-body">
+            <ul class="nav nav-tabs nav-justified" id="aboutTabs" >
+              <li class="active"><a style="color:#036bfc" href="#about" data-toggle="tab"><i class="fa fa-question-circle" style="color:#036bfc"></i>&nbsp;About the project</a></li>
+
+              <li><a style="color:#036bfc" href="#disclaimer" data-toggle="tab"><i class="fa fa-question-circle" style="color:#036bfc"></i>&nbsp;Further information</a></li>
+              
+            </ul>
+            <div class="tab-content" id="aboutTabsContent">
+              <div class="tab-pane fade active in" id="about">
+                 <h4><b>Connecting Scenic Rim habitats through wildlife corridors, working with local landholders to help native wildlife survive and thrive.</b></h4> 
+                <p>Most of the Scenic Rim's national parks and other protected areas harbour high-altitude dense forest. Squirrel gliders and other wildlife prefer low-altitude, drier open forests which are not so well protected. Movement between remaining forest fragments is becoming increasingly difficult. We'd like to change that!</p> 
+                 
+                <p>You can check to see where your prpoerty lies in respect to the proposed corridors. Simply search by your property name in the search box in the top right corner of the map. If its not included, no problem, just get in touch and let us know your address - we'll work it out from there.</p>     
+               
+                 <div class="panel panel-primary">
+                  <div class="panel-heading" style="background-color:#036bfc"><b>Contact Us</b></div>
+                  <ul class="list-group">
+                      <li class="list-group-item"><b>Wildlife Preservation Society of Qld Scenic Rim Branch</b>
+                          <p></p>
+                          <p><a href="https://scenicrimwildlifecorridor.wordpress.com/106-2/"><h4>Register interest as a volunteer or landholder</h4></a></p>
+                          <p></p>
+                          <p>Website: <a href="https://scenicrim.wildlife.org.au/"><b>scenicrim.wildlife.org.au/</b></a></p>
+                          <p>Website: <a href="https://scenicrimwildlifecorridor.wordpress.com/"><b>scenicrimwildlifecorridor.wordpress.com/</b></a></p>
+                          
+                          <p>Email:  <a href="mailto:scenicrim@wildlife.org.au"><b>scenicrim@wildlife.org.au</b></a></p>
+                           <p>Facebook: @Scenic.Rim.Wildlife</p>
+                           <p>Phone: <b>07 5544 1283</b></p>
+                                  
+                  </ul>
+                  
+                </div>      
+                  
+                   
+                   <div class="row">
+  <div class="column">
+      &nbsp &nbsp <img src="https://scenicrimwildlifecorridor.files.wordpress.com/2019/12/installing-nestbox.jpg?w=1024" height="200">
+
+    <img src="https://scenicrimwildlifecorridor.files.wordpress.com/2019/12/treeplanting.jpg?w=1024" height="200">
+
+    <img src="https://scenicrimwildlifecorridor.files.wordpress.com/2020/01/spot_lighting_family.jpg?w=1024" height="200">
+  </div>
+</div>
+                   
+                   
+                   
+                   
+                   
+              </div>
+              <div  id="disclaimer" class="tab-pane fade text-danger">
+                
+           
+                  
+
+                  <div class="panel-heading" style="color:white" ><b>Application features</b></div>
+           
+                      <p></p>
+                  
+                  <p style="color:#2F4F4F"> 
+             
+                  
+                     <p style="color:#2F4F4F">This program is a full-screen mobile-friendly application with responsive navbar and modal placeholders using <a href="http://getbootstrap.com/">Bootstrap 3</a>, <a href="http://leafletjs.com/" target="_blank">Leaflet</a>, and <a href="http://twitter.github.io/typeahead.js/" target="_blank">typeahead.js</a>, and builds on the excellent Bootleaf code. Features include client-side multi-layer search with autocomplete and a responsive sidebar synced to the map bounds that can be sorted or filtered.</p>  
+                  
+                  <p style="color:#2F4F4F"> There are multiple layers including the Scenic Rim boundary; proposed corridor routes; property names and their boundary areas; and recorded sightings of target species (such as gliders or koalas) – all of which can be searched for in the program. There are also a range of base maps including satellite imagery, hill shaded topographic maps (to highlight slopes and gradients), and several others. The program will be updated with additional layers added as new information becomes available -   the idea being that the app will evolve with the project.</p>  
+                  
+                  <p>This web mapping application was developed free of charge in support of the wonderful work of the Wildlife Preservation Society of Queensland.</p>
+                  
+                    
+                <p style="color:#2F4F4F"><b>If you think that I could help with your wildlife conservation project, send me a message at <a href="mailto:andrew.mackey@live.com"><b>andrew.mackey@live.com</b></a></b></p>.
+                      
+
+
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div class="modal fade" id="legendModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Map Legend</h4>
+          </div>
+          <div class="modal-body">
+            <p>Mammals &nbsp&nbsp&nbsp&nbsp Birds &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Hubs &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Property centroids </p> &nbsp<img src="assets/img/koala.png" width="50">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <img src="assets/img/parrot.png" width="50">&nbsp&nbsp&nbsp <img src="assets/img/leaf.png" width="50">&nbsp&nbsp&nbsp &nbsp&nbsp&nbsp  &nbsp&nbsp&nbsp <img src="assets/img/rural.png" width="50">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">BioGeo Login</h4>
+          </div>
+          <div class="modal-body">
+            <form id="contact-form">
+              <fieldset>
+                <div class="form-group">
+                  <label for="name">Username:</label>
+                  <input type="text" class="form-control" id="username">
+                </div>
+                <div class="form-group">
+                  <label for="email">Password:</label>
+                  <input type="password" class="form-control" id="password">
+                </div>
+              </fieldset>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary" data-dismiss="modal">Login</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div class="modal fade" id="featureModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button class="close" type="button" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title text-primary" id="feature-title"></h4>
+          </div>
+          <div class="modal-body" id="feature-info"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div class="modal fade" id="attributionModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button class="close" type="button" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">
+              Developed by <a href='https://biogeo.com.au/'>biogeo.com.au</a>
+            </h4>
+          </div>
+          <div class="modal-body">
+            <div id="attribution"></div>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.5/typeahead.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.3/handlebars.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.1.1/list.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
+    <script src="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js"></script>
+    <script src="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.43.0/L.Control.Locate.min.js"></script>
+    <script src="assets/leaflet-groupedlayercontrol/leaflet.groupedlayercontrol.js"></script>
+    <script src="assets/js/app.js"></script>
+  </body>
+</html>
