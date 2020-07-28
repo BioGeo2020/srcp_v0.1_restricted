@@ -1,4 +1,4 @@
-var map, featureList, scenicrimSearch = [], conservationSearch = [], propertiesSearch = [], hubsSearch = [], centroidsSearch = [], speciesSearch = [], glidersSearch = [];
+var map, featureList, scenicrimSearch = [], landvolSearch = [], propertiesSearch = [], hubsSearch = [], centroidsSearch = [], speciesSearch = [], glidersSearch = [];
 
 $(window).resize(function() {
   sizeLayerControl();
@@ -30,7 +30,7 @@ $("#full-extent-btn").click(function() {
 });
 
 $("#full-extent-btn").click(function() {
-  map.fitBounds(conservation.getBounds());
+  map.fitBounds(landvol.getBounds());
   $(".navbar-collapse.in").collapse("hide");
   return false;
 });
@@ -115,7 +115,7 @@ function syncSidebar() {
     centroids.eachLayer(function (layer) {
     if (map.hasLayer(centroidsLayer)) {
       if (map.getBounds().contains(layer.getLatLng())) {
-        $("#feature-list tbody").append('<tr class="feature-row" id="' + L.stamp(layer) + '" lat="' + layer.getLatLng().lat + '" lng="' + layer.getLatLng().lng + '"><td style="vertical-align: middle;"><img width="16" height="18" src="assets/img/rural.png"></td><td class="feature-Name">' + layer.feature.properties.BoroName + '</td><td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');
+        $("#feature-list tbody").append('<tr class="feature-row" id="' + L.stamp(layer) + '" lat="' + layer.getLatLng().lat + '" lng="' + layer.getLatLng().lng + '"><td style="vertical-align: middle;"><img width="16" height="18" src="assets/img/tree.png"></td><td class="feature-Name">' + layer.feature.properties.BoroName + '</td><td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');
       }
     }
   });  
@@ -136,6 +136,7 @@ function syncSidebar() {
       }
     }
   }); 
+    
 
   /* Update list.js featureList */
   featureList = new List("features", {
@@ -208,53 +209,106 @@ $.getJSON("data/scenic_rim.geojson", function (data) {
   scenicrim.addData(data);
 });
 
-var conservation = L.geoJson(null, {
+
+
+
+
+//Cxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+
+
+
+var landvol = L.geoJson(null, {
   style: function (feature) {
-    return {
-      color: "black",
-      border: "black",
-      weight: 0.5,
-      fill: true,
-      opacity: 0.5,
-      clickable: true
-    };
+      return {
+        color: "blue",
+        weight: 3,
+        opacity: 1
+      };
   },
   onEachFeature: function (feature, layer) {
-    conservationSearch.push({
-      name: layer.feature.properties.BoroName,
-      source: "Conservation areas",
-      id: L.stamp(layer),
-      bounds: layer.getBounds()
+    if (feature.properties) {
+      var content = "<table class='table table-striped table-bordered table-condensed'>" + "<tr><th>Name</th><td>" + feature.properties.BoroName + "</td></tr>" + "<tr><th>Address</th><td>" + feature.properties.Address + "</td></tr>" + "<table>";
+      layer.on({
+        click: function (e) {
+          $("#feature-title").html(feature.properties.BoroName);
+          $("#feature-info").html(content);
+          $("#featureModal").modal("show");
+
+        }
+      });
+    }
+    layer.on({
+      mouseover: function (e) {
+        var layer = e.target;
+        layer.setStyle({
+          weight: 0.5,
+          color: "#0000FF",
+          opacity: 1
+        });
+        if (!L.Browser.ie && !L.Browser.opera) {
+          layer.bringToFront();
+        }
+      },
+      mouseout: function (e) {
+        landvol.resetStyle(e.target);
+      }
     });
   }
 });
-$.getJSON("data/rural_properties2.geojson", function (data) {
-  conservation.addData(data);
+$.getJSON("data/landvols210720.geojson", function (data) {
+  landvol.addData(data);
 });
 
-var properties = L.geoJson(null, {
+
+//Cxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+var properties= L.geoJson(null, {
   style: function (feature) {
-    return {
+      return {
       color: "white",
       border: "black",
       weight: 0.5,
       fill: true,
       opacity: 0.5,
-      clickable: true
-    };
+      };
   },
   onEachFeature: function (feature, layer) {
-    propertiesSearch.push({
-      name: layer.feature.properties.BoroName,
-      source: "Properties",
-      id: L.stamp(layer),
-      bounds: layer.getBounds()
+    if (feature.properties) {
+      var content = "<table class='table table-striped table-bordered table-condensed'>" + "<tr><th>Plan</th><td>" + feature.properties.PLAN + "</td></tr>" + "<tr><th>Locality<td>" + feature.properties.LOCALITY + "</td></tr>" + "<table>";
+      layer.on({
+        click: function (e) {
+          $("#feature-title").html(feature.properties.PLAN);
+          $("#feature-info").html(content);
+          $("#featureModal").modal("show");
+
+        }
+      });
+    }
+    layer.on({
+      mouseover: function (e) {
+        var layer = e.target;
+        layer.setStyle({
+          weight: 0.5,
+          color: "#0000FF",
+          opacity: 1
+        });
+        if (!L.Browser.ie && !L.Browser.opera) {
+          layer.bringToFront();
+        }
+      },
+      mouseout: function (e) {
+        properties.resetStyle(e.target);
+      }
     });
   }
 });
-$.getJSON("data/rural_properties2.geojson", function (data) {
+$.getJSON("data/skinnylots.geojson", function (data) {
   properties.addData(data);
 });
+
+
+
 
 //Create a color dictionary based off of subway/corridors route_id
 var corridorColors = {"1":"#fd9a00", "2":"#ff3135", "3":"#ff3135", "4":"#fd9a00",
@@ -370,7 +424,7 @@ var centroids = L.geoJson(null, {
   pointToLayer: function (feature, latlng) {
     return L.marker(latlng, {
       icon: L.icon({
-        iconUrl: "assets/img/rural.png",
+        iconUrl: "assets/img/tree.png",
         iconSize: [24, 28],
         iconAnchor: [12, 28],
         popupAnchor: [0, -25]
@@ -383,8 +437,8 @@ var centroids = L.geoJson(null, {
     if (feature.properties) {
       var content = "<table class='table table-striped table-bordered table-condensed'>" 
       + "<tr><th>Name</th><td>" + feature.properties.BoroName + "</td></tr>" 
-      + "<tr><th>Type</th><td>" + feature.properties.FEATURETYP + "</td></tr>" 
-      + "<tr><th>Data source</th><td>" + feature.properties.ATTRIBUTES + "</td></tr>" 
+      + "<tr><th>Address</th><td>" + feature.properties.Address+ "</td></tr>" 
+      + "<tr><th>Lot plan ID</th><td>" + feature.properties.LOTPLAN + "</td></tr>" 
       + "<table>";
       layer.on({
         click: function (e) {
@@ -394,11 +448,11 @@ var centroids = L.geoJson(null, {
           highlight.clearLayers().addLayer(L.circleMarker([feature.geometry.coordinates[1], feature.geometry.coordinates[0]], highlightStyle));
         }
       });
-      $("#feature-list tbody").append('<tr class="feature-row" id="' + L.stamp(layer) + '" lat="' + layer.getLatLng().lat + '" lng="' + layer.getLatLng().lng + '"><td style="vertical-align: middle;"><img width="16" height="18" src="assets/img/rural.png"></td><td class="feature-name">' + layer.feature.properties.BoroName + '</td><td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');
+      $("#feature-list tbody").append('<tr class="feature-row" id="' + L.stamp(layer) + '" lat="' + layer.getLatLng().lat + '" lng="' + layer.getLatLng().lng + '"><td style="vertical-align: middle;"><img width="16" height="18" src="assets/img/tree.png"></td><td class="feature-name">' + layer.feature.properties.BoroName + '</td><td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');
       centroidsSearch.push({
         name: layer.feature.properties.BoroName,
         type: layer.feature.properties.FEATURETYP ,
-        source: "Centroids",
+        source: "Volunteer points",
         id: L.stamp(layer),
         lat: layer.feature.geometry.coordinates[1],
         lng: layer.feature.geometry.coordinates[0]
@@ -406,7 +460,7 @@ var centroids = L.geoJson(null, {
     }
   }
 });
-$.getJSON("data/ruralprop2.geojson", function (data) {
+$.getJSON("data/landvolpoints.geojson", function (data) {
   centroids.addData(data);
   map.addLayer(centroidsLayer);
 });
@@ -465,7 +519,7 @@ $.getJSON("data/koala.geojson", function (data) {
 map = L.map("map", {
   zoom: 9,
   center: [-28.0605, 152.8618],
-  layers: [esriImagery, scenicrim, corridorLines, properties, markerClusters, highlight],
+  layers: [esriImagery, scenicrim, corridorLines, properties, landvol, markerClusters, highlight],
   zoomControl: false,
   attributionControl: false
 });
@@ -683,7 +737,7 @@ var attributionControl = L.control({
 });
 attributionControl.onAdd = function (map) {
   var div = L.DomUtil.create("div", "leaflet-control-attribution");
-  div.innerHTML = "<span class='hidden-xs'>Andrew Mackey </span><a href='#' onclick='$(\"#attributionModal\").modal(\"show\"); return false;'></a>";
+  div.innerHTML = "<span class='hidden-xs'> <a href='https://biogeo.com.au/'>BioGeo.com.au </span><a href='#' onclick='$(\"#attributionModal\").modal(\"show\"); return false;'></a>";
   return div;
 };
 map.addControl(attributionControl);
@@ -745,13 +799,13 @@ var groupedOverlays = {
     "<img src='assets/img/koala.png' width='24' height='28'>&nbsp;Mammals": speciesLayer,
     "<img src='assets/img/parrot.png' width='24' height='28'>&nbsp;Birds": glidersLayer,
     "<img src='assets/img/leaf.png' width='24' height='28'>&nbsp;Hubs": hubsLayer,
-    "<img src='assets/img/rural.png' width='24' height='28'>&nbsp;Centroids": centroidsLayer
+    "<img src='assets/img/tree.png' width='24' height='28'>&nbsp;Volunteer points": centroidsLayer
 
   },
   "Layers": {
     "Scenic Rim": scenicrim,
-    "Properties (grey)": conservation,
-    "Properties (white)": properties,
+    "Land volunteers": landvol,
+    "Property lots": properties,
     "Corridors": corridorLines
   }
 };
@@ -812,7 +866,7 @@ $(document).one("ajaxStop", function () {
   });
     
     var centroidsBH = new Bloodhound({
-    name: "Centroids",
+    name: "Volunteer points",
     datumTokenizer: function (d) {
       return Bloodhound.tokenizers.whitespace(d.name);
     },
@@ -906,7 +960,7 @@ $(document).one("ajaxStop", function () {
     displayKey: "name",
     source: centroidsBH.ttAdapter(),
     templates: {
-      header: "<h4 class='typeahead-header'><img src='assets/img/rural.png' width='24' height='28'>&nbsp;Centroids</h4>",
+      header: "<h4 class='typeahead-header'><img src='assets/img/tree.png' width='24' height='28'>&nbsp;Centroids</h4>",
       suggestion: Handlebars.compile(["{{name}}<br>&nbsp;<small>{{type}}</small>"].join(""))
     }
   }, {
